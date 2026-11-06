@@ -47,12 +47,11 @@ function doPost(e) {
     var message = (data.message || data.scope || data.project_scope || "No additional notes provided").trim();
     var timestamp = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
-    var targetEmail = "nathgokul325@gmail.com";
-    var companyEmail = "codenexatechnologies26@gmail.com";
+    var targetEmail = "codenexatechnologies26@gmail.com";
     var emailSubject = "Official Project Inquiry: " + name + " - " + service + " - Codenexa Technologies";
 
     var adminBody = 
-      "Dear Gokulnath & Codenexa Engineering Team,\n\n" +
+      "Dear Codenexa Technologies Team,\n\n" +
       "A new project inquiry has been submitted through codenexatechnologies.in:\n\n" +
       "==================================================\n" +
       "CLIENT CONTACT INFORMATION\n" +
@@ -69,15 +68,10 @@ function doPost(e) {
       "==================================================\n\n" +
       "To reply directly to this client, simply click 'Reply' in your Gmail.";
 
-    // 1. Send notification from codenexatechnologies26@gmail.com to nathgokul325@gmail.com
-    var ccList = companyEmail;
-    if (email && email.indexOf("@") !== -1 && email !== targetEmail) {
-      ccList += "," + email;
-    }
+    // 1. Send notification to Codenexa official inbox
     var mailOptions = {
-      name: "Codenexa Technologies",
-      cc: ccList,
-      replyTo: email || companyEmail
+      name: "Codenexa Web Platform",
+      replyTo: email || targetEmail
     };
 
     GmailApp.sendEmail(targetEmail, emailSubject, adminBody, mailOptions);
