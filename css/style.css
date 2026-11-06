@@ -601,42 +601,226 @@ body {
 }
 
 /* ==========================================================================
-   Sticky Left Ribbon (+ FREE QUOTE - from sample image)
+   Slide-out Left Quote Drawer (Midnight Gold Theme)
    ========================================================================== */
-.sticky-quote-tab {
+.side-quote-drawer {
   position: fixed;
   left: 0;
   top: 50%;
-  transform: translateY(-50%);
-  z-index: 90;
-  background: rgba(6, 17, 33, 0.9);
-  border: 1px solid var(--accent-cyan);
+  transform: translateY(-50%) translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 999;
+}
+
+.side-quote-drawer.open {
+  transform: translateY(-50%) translateX(0);
+}
+
+.side-drawer-card {
+  position: relative;
+  width: 330px;
+  max-width: calc(100vw - 60px);
+  background: linear-gradient(145deg, rgba(8, 15, 30, 0.96) 0%, rgba(4, 9, 20, 0.98) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
   border-left: none;
-  padding: 1rem 0.45rem;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 16px 16px 0;
+  padding: 1.75rem 1.4rem 1.3rem 1.4rem;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(245, 158, 11, 0.18);
+  backdrop-filter: blur(16px);
+}
+
+/* Golden amber shimmer accent line on top */
+.side-drawer-accent-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+  border-radius: 0 16px 0 0;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+}
+
+.side-drawer-title {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: var(--font-main, sans-serif);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.35rem 0;
+  line-height: 1.2;
+}
+
+.side-drawer-subtitle {
+  color: var(--text-dim, #94a3b8);
+  font-size: 0.86rem;
+  line-height: 1.4;
+  margin: 0 0 1.25rem 0;
+}
+
+.side-form-group {
+  margin-bottom: 0.75rem;
+}
+
+.side-drawer-input,
+.side-drawer-select {
+  width: 100%;
+  background: rgba(4, 11, 22, 0.85);
+  border: 1px solid rgba(26, 61, 99, 0.6);
+  border-radius: var(--radius-sm, 8px);
+  padding: 0.75rem 0.9rem;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-family: var(--font-main, sans-serif);
+  transition: all var(--transition-fast, 0.2s ease);
+  box-sizing: border-box;
+}
+
+.side-drawer-input::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+
+.side-drawer-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1rem;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
-  transition: all var(--transition-smooth);
 }
 
-.sticky-quote-tab:hover {
-  background: rgba(245, 158, 11, 0.15);
-  box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
-  transform: translateY(-50%) translateX(4px);
+.side-drawer-select option {
+  background: #060d1a;
+  color: #ffffff;
 }
 
-.sticky-quote-tab span {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--accent-cyan);
+.side-drawer-input:focus,
+.side-drawer-select:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+  background: rgba(6, 17, 33, 0.95);
+}
+
+.side-drawer-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  color: #030712;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-sm, 8px);
+  padding: 0.82rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 22px rgba(245, 158, 11, 0.45);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all var(--transition-fast, 0.2s ease);
+  margin-top: 0.4rem;
+}
+
+.side-drawer-btn:hover {
+  background: linear-gradient(135deg, #fde047 0%, #fbbf24 50%, #f59e0b 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(245, 158, 11, 0.65);
+}
+
+.side-drawer-footer {
+  text-align: center;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.side-lock-icon {
+  font-size: 0.85rem;
+  color: #f59e0b;
+}
+
+/* Protruding Tab on the Right Edge */
+.side-drawer-tab {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(6, 17, 33, 0.95);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  padding: 1.1rem 0.45rem;
+  cursor: pointer;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(245, 158, 11, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  transform-origin: left center;
+  user-select: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.side-drawer-tab:hover {
+  background: rgba(245, 158, 11, 0.15);
+  box-shadow: 6px 0 25px rgba(245, 158, 11, 0.5);
+  transform: translateY(-50%) translateX(2px);
+}
+
+.side-drawer-tab .tab-text-open {
+  display: inline-block;
+  color: #f59e0b;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  transform: rotate(180deg);
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.side-drawer-tab .tab-text-close {
+  display: none;
+  color: #f87171;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  transform: rotate(180deg);
+}
+
+.side-quote-drawer.open .side-drawer-tab {
+  border-color: rgba(248, 113, 113, 0.45);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(248, 113, 113, 0.25);
+}
+
+.side-quote-drawer.open .side-drawer-tab:hover {
+  background: rgba(248, 113, 113, 0.15);
+}
+
+.side-quote-drawer.open .side-drawer-tab .tab-text-open {
+  display: none;
+}
+
+.side-quote-drawer.open .side-drawer-tab .tab-text-close {
+  display: inline-block;
+}
+
+@media (max-width: 640px) {
+  .side-drawer-card {
+    width: 290px;
+    padding: 1.4rem 1.1rem 1.1rem 1.1rem;
+  }
+  .side-drawer-title {
+    font-size: 1.3rem;
+  }
 }
 
 /* ==========================================================================

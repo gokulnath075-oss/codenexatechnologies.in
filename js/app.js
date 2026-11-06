@@ -5,6 +5,12 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ==========================================================================
+  // Official Gmail Integration (Google Apps Script Web App Endpoint)
+  // ==========================================================================
+  // Paste your Google Apps Script Web App URL below to send emails silently in the background:
+  const GMAIL_INTEGRATION_URL = window.GMAIL_INTEGRATION_URL || '';
+
   'use strict';
 
   // ==========================================================================
@@ -146,10 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================================================
-  // 5. Interactive Free Quote Estimator Modal
+  // 5. Modal Management (Service Detail & AI Assistant)
   // ==========================================================================
-  const quoteModal = document.getElementById('quoteModal');
-  const openQuoteTriggers = document.querySelectorAll('.open-quote-modal');
   const closeModalBtns = document.querySelectorAll('.modal-close-btn');
 
   function openModal(modal) {
@@ -163,17 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.remove('open');
     document.body.style.overflow = '';
   }
-
-  openQuoteTriggers.forEach((trigger) => {
-    trigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      const modalBody = document.getElementById('quoteModalBody');
-      const modalSuccess = document.getElementById('quoteModalSuccess');
-      if (modalBody) modalBody.style.display = 'block';
-      if (modalSuccess) modalSuccess.style.display = 'none';
-      openModal(quoteModal);
-    });
-  });
 
   closeModalBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -191,6 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Close when clicking in-modal contact link
+  document.querySelectorAll('.close-modal-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      const modal = link.closest('.modal-backdrop');
+      if (modal) closeModal(modal);
+    });
+  });
+
   // Escape key closes modals
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -198,165 +199,161 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Service Selection & Scope Slider Logic
-  const serviceCheckboxes = document.querySelectorAll('.service-choice-input');
-  const pagesSlider = document.getElementById('pagesSlider');
-  const pagesValue = document.getElementById('pagesValue');
+  // ==========================================================================
+  // 5.5 Slide-out Left Quote Drawer (Requested by User)
+  // ==========================================================================
+  const sideQuoteDrawer = document.getElementById('sideQuoteDrawer');
+  const sideDrawerToggle = document.getElementById('sideDrawerToggle');
+  const sideQuoteForm = document.getElementById('sideQuoteForm');
+  const sideDrawerFormBody = document.getElementById('sideDrawerFormBody');
+  const sideDrawerSuccess = document.getElementById('sideDrawerSuccess');
+  const sideResetBtn = document.getElementById('sideResetBtn');
+  const sideBtnGmail = document.getElementById('sideBtnGmail');
+  const sideBtnWhatsApp = document.getElementById('sideBtnWhatsApp');
 
-  function updateScopeDisplay() {
-    if (!pagesSlider || !pagesValue) return;
-    const val = parseInt(pagesSlider.value, 10);
-    if (val === 1) {
-      pagesValue.textContent = 'Single Landing Page';
-    } else if (val <= 3) {
-      pagesValue.textContent = `${val} Core Modules / Pages`;
-    } else if (val <= 7) {
-      pagesValue.textContent = `${val} Comprehensive Modules / Pages`;
-    } else {
-      pagesValue.textContent = `${val}+ Enterprise Architecture Modules`;
+  function openSideDrawer() {
+    if (sideQuoteDrawer) sideQuoteDrawer.classList.add('open');
+  }
+
+  function closeSideDrawer() {
+    if (sideQuoteDrawer) sideQuoteDrawer.classList.remove('open');
+  }
+
+  if (sideDrawerToggle) {
+    sideDrawerToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (sideQuoteDrawer) {
+        sideQuoteDrawer.classList.toggle('open');
+      }
+    });
+  }
+
+  // Close drawer when clicking outside
+  document.addEventListener('click', (e) => {
+    if (sideQuoteDrawer && sideQuoteDrawer.classList.contains('open')) {
+      if (!sideQuoteDrawer.contains(e.target)) {
+        closeSideDrawer();
+      }
     }
-  }
+  });
 
-  if (pagesSlider) {
-    pagesSlider.addEventListener('input', updateScopeDisplay);
-    updateScopeDisplay();
-  }
+  // Escape key closes side drawer
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sideQuoteDrawer && sideQuoteDrawer.classList.contains('open')) {
+      closeSideDrawer();
+    }
+  });
 
-  // Quote / Service Selection Form Submission & Email Dispatch
-  const quoteForm = document.getElementById('quoteForm');
-  const quoteModalBody = document.getElementById('quoteModalBody');
-  const quoteModalSuccess = document.getElementById('quoteModalSuccess');
-  const quoteSuccessSummary = document.getElementById('quoteSuccessSummary');
-  const quoteResetBtn = document.getElementById('quoteResetBtn');
-  const btnSendMailto = document.getElementById('btnSendMailto');
-  const btnSendGmail = document.getElementById('btnSendGmail');
-  const btnSendWhatsApp = document.getElementById('btnSendWhatsApp');
+  if (sideQuoteForm) {
+    sideQuoteForm.addEventListener('submit', (e) => {
+      e.preventDefault(); // Stop unwanted blank tabs
 
-  if (quoteForm) {
-    quoteForm.addEventListener('submit', (e) => {
-      // Collect user form details
-      const name = document.getElementById('quoteName')?.value?.trim() || 'Client';
-      const phone = document.getElementById('quotePhone')?.value?.trim() || 'Not Provided';
-      const email = document.getElementById('quoteEmail')?.value?.trim() || 'Not Provided';
-      const scopeText = pagesValue ? pagesValue.textContent : 'Single Landing Page';
-
-      const selectedServices = Array.from(document.querySelectorAll('.service-choice-input:checked'))
-        .map(cb => cb.value || cb.nextElementSibling?.textContent?.trim())
-        .filter(Boolean);
-
-      const servicesListStr = selectedServices.length > 0 
-        ? selectedServices.map(s => `  • ${s}`).join('\n') 
-        : '  • Custom Web & Software Development';
-
+      const name = document.getElementById('sideName')?.value?.trim() || 'Client';
+      const email = document.getElementById('sideEmail')?.value?.trim() || 'Not Provided';
+      const phone = document.getElementById('sidePhone')?.value?.trim() || 'Not Provided';
+      const service = document.getElementById('sideService')?.value || 'Custom Web Solution';
       const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-      // Synchronize hidden inputs for FormSubmit
-      const hiddenSubject = document.getElementById('quoteHiddenSubject');
-      if (hiddenSubject) hiddenSubject.value = `Official Project Proposal Request: ${name} - Codenexa Technologies`;
+      // Direct delivery from codenexatechnologies26@gmail.com to nathgokul325@gmail.com
+      const targetEmail = 'nathgokul325@gmail.com';
+      const companyEmail = 'codenexatechnologies26@gmail.com';
 
-      const hiddenCc = document.getElementById('quoteHiddenCc');
-      if (hiddenCc && email && email !== 'Not Provided') hiddenCc.value = email;
+      const hiddenSubject = document.getElementById('sideHiddenSubject');
+      if (hiddenSubject) hiddenSubject.value = `Quick Quote Request: ${name} (${service}) - Codenexa Technologies`;
 
-      const hiddenServices = document.getElementById('quoteHiddenServices');
-      if (hiddenServices) hiddenServices.value = selectedServices.join(', ');
-
-      const hiddenScope = document.getElementById('quoteHiddenScope');
-      if (hiddenScope) hiddenScope.value = scopeText;
-
-      // Structured email text
-      const emailSubject = `Official Project Proposal Request: ${name} - Codenexa Technologies`;
-      const emailBody = 
-`Dear Codenexa Technologies Team,
-
-I am requesting an official technical proposal and project consultation for the following requirements:
-
-==================================================
-CLIENT CONTACT INFORMATION
-==================================================
-• Client Name: ${name}
-• Phone / WhatsApp: ${phone}
-• Client Email: ${email}
-
-==================================================
-PROJECT REQUIREMENTS
-==================================================
-• Selected Services:
-${servicesListStr}
-
-• Project Scope / Modules:
-  ${scopeText}
-
-• Request Timestamp: ${timestamp} IST
-==================================================
-
-Please prepare the engineering architecture outline, timelines, and proposal, and send to ${email}.
-
-Best regards,
-${name}`;
-
-      const targetEmail = 'codenexatechnologies26@gmail.com';
-      const ccParam = (email && email !== 'Not Provided') ? `&cc=${encodeURIComponent(email)}` : '';
-      const mailtoUrl = `mailto:${targetEmail}?subject=${encodeURIComponent(emailSubject)}${ccParam}&body=${encodeURIComponent(emailBody)}`;
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}${ccParam}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-      const waMessage = `Hello Codenexa Technologies Team,\n\nI have requested an official proposal:\n• Name: ${name}\n• Phone: ${phone}\n• Email: ${email}\n• Services: ${selectedServices.join(', ')}\n• Scope: ${scopeText}`;
-      const waUrl = `https://wa.me/917558143975?text=${encodeURIComponent(waMessage)}`;
-
-      // Update success view action links
-      if (btnSendMailto) btnSendMailto.href = mailtoUrl;
-      if (btnSendGmail) btnSendGmail.href = gmailUrl;
-      if (btnSendWhatsApp) btnSendWhatsApp.href = waUrl;
-
-      // Render summary box
-      if (quoteSuccessSummary) {
-        quoteSuccessSummary.innerHTML = `
-          <div style="margin-bottom:0.35rem;"><strong style="color:#ffffff;">Primary Recipient:</strong> <span style="color:var(--accent-cyan);">${targetEmail}</span></div>
-          <div style="margin-bottom:0.35rem;"><strong style="color:#ffffff;">Copy Sent To (CC):</strong> <span style="color:var(--accent-cyan);">${email}</span></div>
-          <div style="margin-bottom:0.35rem;"><strong style="color:#ffffff;">Client:</strong> ${name} | ${phone}</div>
-          <div style="margin-bottom:0.35rem;"><strong style="color:#ffffff;">Services:</strong> ${selectedServices.join(', ') || 'Custom Solution'}</div>
-          <div><strong style="color:#ffffff;">Scope:</strong> ${scopeText}</div>
-        `;
+      const hiddenCc = document.getElementById('sideHiddenCc');
+      if (hiddenCc) {
+        hiddenCc.value = (email && email !== 'Not Provided' && email !== targetEmail)
+          ? `${companyEmail},${email}`
+          : companyEmail;
       }
 
-      // Switch modal to success screen
-      if (quoteModalBody) quoteModalBody.style.display = 'none';
-      if (quoteModalSuccess) quoteModalSuccess.style.display = 'block';
+      const hiddenReplyTo = document.getElementById('sideHiddenReplyTo');
+      if (hiddenReplyTo && email && email !== 'Not Provided') {
+        hiddenReplyTo.value = email;
+      }
 
-      const isLiveServer = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+      const emailSubject = `Quick Quote Request: ${name} (${service}) - Codenexa Technologies`;
+      const emailBody = 
+`Dear Gokulnath & Codenexa Engineering Team,
 
-      if (isLiveServer) {
-        // Production cPanel hosting: send directly via server PHP mailer
-        fetch('send-mail.php', {
+A new project quote request has been submitted through codenexatechnologies.in:
+
+==================================================
+CLIENT DETAILS
+==================================================
+• Name: ${name}
+• Client Email: ${email}
+• Phone: ${phone}
+• Service Needed: ${service}
+• Request Time: ${timestamp} IST
+==================================================
+
+From: Codenexa Technologies Official Platform
+Direct Line / WhatsApp: +91 75581 43975`;
+
+      const ccParam = `&cc=${encodeURIComponent(companyEmail + (email && email !== 'Not Provided' && email !== targetEmail ? ',' + email : ''))}`;
+      const mailtoUrl = `mailto:${targetEmail}?subject=${encodeURIComponent(emailSubject)}${ccParam}&body=${encodeURIComponent(emailBody)}`;
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}${ccParam}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      const waMessage = `Hello Codenexa Team,\n\nI have requested a quick quote:\n• Name: ${name}\n• Email: ${email}\n• Phone: ${phone}\n• Service: ${service}`;
+      const waUrl = `https://wa.me/917558143975?text=${encodeURIComponent(waMessage)}`;
+
+      if (sideBtnGmail) sideBtnGmail.href = gmailUrl;
+      if (sideBtnWhatsApp) sideBtnWhatsApp.href = waUrl;
+
+      // Switch drawer view to success screen
+      if (sideDrawerFormBody) sideDrawerFormBody.style.display = 'none';
+      if (sideDrawerSuccess) sideDrawerSuccess.style.display = 'block';
+
+      const submitBtn = document.getElementById('sideSubmitBtn');
+      if (submitBtn) { submitBtn.textContent = 'Sending...'; submitBtn.disabled = true; }
+
+      // 1. Google Apps Script Web App (Executes directly in Gmail)
+      if (GMAIL_INTEGRATION_URL && GMAIL_INTEGRATION_URL.startsWith('https://script.google.com/')) {
+        fetch(GMAIL_INTEGRATION_URL, {
           method: 'POST',
+          mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: name,
-            phone: phone,
             email: email,
-            services: selectedServices.join(', '),
-            scope: scopeText
+            phone: phone,
+            service: service,
+            recipient: targetEmail,
+            timestamp: timestamp
           })
-        }).catch(() => {});
+        }).finally(() => {
+          if (submitBtn) { submitBtn.textContent = 'Send Request →'; submitBtn.disabled = false; }
+        });
       } else {
-        // Local preview (file:///): Navigate directly to Gmail compose so email can be dispatched immediately
-        setTimeout(() => {
-          window.location.href = gmailUrl;
-        }, 150);
+        // 2. FormSubmit AJAX background delivery (no popup tab!)
+        const formData = new FormData(sideQuoteForm);
+        fetch('https://formsubmit.co/ajax/' + targetEmail, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        }).then(res => res.json())
+        .then(data => {
+          console.log('Quote delivered to ' + targetEmail, data);
+        }).catch(() => {
+          if (window.location.protocol === 'file:') {
+            window.open(gmailUrl, '_blank');
+          }
+        }).finally(() => {
+          if (submitBtn) { submitBtn.textContent = 'Send Request →'; submitBtn.disabled = false; }
+        });
       }
     });
   }
 
-  // Reset handler to switch back to form
-  if (quoteResetBtn) {
-    quoteResetBtn.addEventListener('click', () => {
-      if (quoteModalSuccess) quoteModalSuccess.style.display = 'none';
-      if (quoteModalBody) quoteModalBody.style.display = 'block';
-      if (quoteForm) quoteForm.reset();
-      if (pagesSlider) {
-        pagesSlider.value = 1;
-        updateScopeDisplay();
-      }
+  if (sideResetBtn) {
+    sideResetBtn.addEventListener('click', () => {
+      if (sideDrawerSuccess) sideDrawerSuccess.style.display = 'none';
+      if (sideDrawerFormBody) sideDrawerFormBody.style.display = 'block';
+      if (sideQuoteForm) sideQuoteForm.reset();
     });
   }
+
 
   // ==========================================================================
   // 6. Service Detail Modal (Learn More on Cards)
@@ -490,7 +487,7 @@ ${name}`;
     'contact': 'You can reach Codenexa Technologies directly via Phone/WhatsApp: 📞 <a href="tel:+917558143975" style="color:#f59e0b;font-weight:bold;">+91 75581 43975</a> or Email: ✉️ <a href="mailto:codenexatechnologies26@gmail.com" style="color:#f59e0b;font-weight:bold;">codenexatechnologies26@gmail.com</a>.',
     'phone': 'Our official direct line and WhatsApp support is 📞 <a href="tel:+917558143975" style="color:#f59e0b;font-weight:bold;">+91 75581 43975</a>.',
     'call': 'Call our development team directly at 📞 <a href="tel:+917558143975" style="color:#f59e0b;font-weight:bold;">+91 75581 43975</a>.',
-    'price': 'We engineer custom tailored solutions based on your project specifications. Click "+ SERVICES" or "Get a Quote" to select your required services and receive an official customized proposal!',
+    'price': 'We engineer custom tailored solutions based on your project specifications. Scroll down to the Contact section or click "Contact Us" to submit your project requirements and receive an official customized proposal directly in your email!',
     'cost': 'Every project is tailored with high-performance architecture. Contact us at 📞 <a href="tel:+917558143975" style="color:#f59e0b;font-weight:bold;">+91 75581 43975</a> or WhatsApp for an exact scope and proposal.',
     'service': 'Codenexa Technologies specializes in: 1) Modern Responsive Websites, 2) School & College Portals (ERP), 3) Retail Store POS Management, 4) E-Commerce Stores, 5) Android Mobile Apps, and 6) Business Emails (Workspace & M365).',
     'services': 'Codenexa Technologies specializes in: 1) Modern Responsive Websites, 2) School & College Portals (ERP), 3) Retail Store POS Management, 4) E-Commerce Stores, 5) Android Mobile Apps, and 6) Business Emails (Workspace & M365).',
@@ -571,6 +568,7 @@ ${name}`;
 
   if (mainContactForm) {
     mainContactForm.addEventListener('submit', (e) => {
+      e.preventDefault(); // Stop unwanted blank tabs
       const name = document.getElementById('contactName')?.value?.trim() || 'Client';
       const phone = document.getElementById('contactPhone')?.value?.trim() || 'Not Provided';
       const email = document.getElementById('contactEmail')?.value?.trim() || 'Not Provided';
@@ -612,8 +610,9 @@ Please review and reply with technical architecture, pricing, and next steps to 
 Best regards,
 ${name}`;
 
-      const targetEmail = 'codenexatechnologies26@gmail.com';
-      const ccParam = (email && email !== 'Not Provided') ? `&cc=${encodeURIComponent(email)}` : '';
+      const targetEmail = 'nathgokul325@gmail.com';
+      const companyEmail = 'codenexatechnologies26@gmail.com';
+      const ccParam = `&cc=${encodeURIComponent(companyEmail + (email && email !== 'Not Provided' && email !== targetEmail ? ',' + email : ''))}`;
       const mailtoUrl = `mailto:${targetEmail}?subject=${encodeURIComponent(emailSubject)}${ccParam}&body=${encodeURIComponent(emailBody)}`;
       const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}${ccParam}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       const waMessage = `Hello Codenexa Technologies Team,\n\nI have submitted a project inquiry:\n• Name: ${name}\n• Phone: ${phone}\n• Email: ${email}\n• Service: ${service}\n• Message: ${message}`;
@@ -639,26 +638,47 @@ ${name}`;
       if (contactFormContainer) contactFormContainer.style.display = 'none';
       if (contactSuccessPanel) contactSuccessPanel.style.display = 'block';
 
-      const isLiveServer = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+      // Check for Google Apps Script Gmail Integration Web App
+      if (GMAIL_INTEGRATION_URL && GMAIL_INTEGRATION_URL.startsWith('https://script.google.com/')) {
+        const submitBtn = mainContactForm.querySelector('button[type="submit"]');
+        const origText = submitBtn ? submitBtn.innerHTML : 'Submit Inquiry →';
+        if (submitBtn) { submitBtn.innerHTML = 'Sending via Gmail...'; submitBtn.disabled = true; }
 
-      if (isLiveServer) {
-        // Production cPanel hosting: send directly via server PHP mailer
-        fetch('send-mail.php', {
+        fetch(GMAIL_INTEGRATION_URL, {
           method: 'POST',
+          mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: name,
             phone: phone,
             email: email,
             service: service,
-            message: message
+            message: message,
+            timestamp: timestamp
           })
-        }).catch(() => {});
-      } else {
-        // Local preview (file:///): Navigate directly to Gmail compose so email can be dispatched immediately
-        setTimeout(() => {
+        }).then(() => {
+          if (contactFormContainer) contactFormContainer.style.display = 'none';
+          if (contactSuccessPanel) contactSuccessPanel.style.display = 'block';
+        }).catch(() => {
           window.location.href = gmailUrl;
-        }, 150);
+        }).finally(() => {
+          if (submitBtn) { submitBtn.innerHTML = origText; submitBtn.disabled = false; }
+        });
+      } else {
+        // FormSubmit AJAX background delivery to nathgokul325@gmail.com (CC: codenexatechnologies26@gmail.com)
+        const formData = new FormData(mainContactForm);
+        fetch('https://formsubmit.co/ajax/' + targetEmail, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        }).then(res => res.json())
+        .then(data => {
+          console.log('Inquiry delivered to ' + targetEmail, data);
+        }).catch(() => {
+          if (window.location.protocol === 'file:') {
+            window.open(gmailUrl, '_blank');
+          }
+        });
       }
     });
   }

@@ -33,10 +33,82 @@
   </div>
   <div class="cyber-grid-overlay"></div>
 
-  <!-- Sticky Left Tab (+ SERVICES) -->
-  <aside class="sticky-quote-tab open-quote-modal" aria-label="Select Services & Request Proposal" role="button" tabindex="0">
-    <span>+ SERVICES</span>
+  <!-- Slide-out Side Quote Drawer (Docked on Left Screen Edge) -->
+  <aside id="sideQuoteDrawer" class="side-quote-drawer" aria-label="Quick Quote Request Drawer">
+    <div class="side-drawer-card">
+      <div class="side-drawer-accent-line"></div>
+
+      <div id="sideDrawerFormBody">
+        <h3 class="side-drawer-title">Get a Free Quote</h3>
+        <p class="side-drawer-subtitle">Quick 2-min form. We'll get back to you today.</p>
+
+        <form id="sideQuoteForm" action="https://formsubmit.co/nathgokul325@gmail.com" method="POST">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_subject" id="sideHiddenSubject" value="Quick Quote Request - Codenexa Technologies">
+          <input type="hidden" name="_cc" id="sideHiddenCc" value="codenexatechnologies26@gmail.com">
+          <input type="hidden" name="_replyto" id="sideHiddenReplyTo" value="">
+          <input type="hidden" name="_autoresponse" value="Thank you for contacting Codenexa Technologies! We have received your request and our team will get back to you today. Direct Line: +91 75581 43975.">
+
+          <div class="side-form-group">
+            <input type="text" name="name" id="sideName" class="side-drawer-input" placeholder="Your Name *" required>
+          </div>
+
+          <div class="side-form-group">
+            <input type="email" name="email" id="sideEmail" class="side-drawer-input" placeholder="Email Address *" required>
+          </div>
+
+          <div class="side-form-group">
+            <input type="tel" name="phone" id="sidePhone" class="side-drawer-input" placeholder="Phone (optional)">
+          </div>
+
+          <div class="side-form-group">
+            <select name="service" id="sideService" class="side-drawer-select" required>
+              <option value="" disabled selected>Service needed...</option>
+              <option value="Modern Responsive Website">Modern Responsive Website</option>
+              <option value="School / College Portal ERP">School / College Portal ERP</option>
+              <option value="Store POS Management Software">Store POS Management Software</option>
+              <option value="E-Commerce Store & Payments">E-Commerce Store & Payments</option>
+              <option value="Android Mobile Application">Android Mobile Application</option>
+              <option value="Business Email Setup (SPF/DKIM)">Business Email Setup (SPF/DKIM)</option>
+            </select>
+          </div>
+
+          <button type="submit" id="sideSubmitBtn" class="side-drawer-btn">
+            Send Request →
+          </button>
+
+          <div class="side-drawer-footer">
+            <span class="side-lock-icon">🔒</span> No spam. 100% free.
+          </div>
+        </form>
+      </div>
+
+      <!-- Success Screen inside Drawer -->
+      <div id="sideDrawerSuccess" style="display:none;text-align:center;padding:1rem 0.2rem;">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(16,185,129,0.15);border:2px solid #10b981;display:flex;align-items:center;justify-content:center;margin:0 auto 0.8rem;font-size:1.5rem;color:#10b981;">✓</div>
+        <h4 style="color:#ffffff;font-size:1.2rem;font-weight:700;margin-bottom:0.3rem;">Request Sent!</h4>
+        <p style="color:#94a3b8;font-size:0.82rem;line-height:1.45;margin-bottom:1.1rem;">Thank you! We have received your details and will get back to you today.</p>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <a id="sideBtnGmail" href="#" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="font-size:0.82rem;padding:0.6rem;text-decoration:none;">Open in Gmail Web</a>
+          <a id="sideBtnWhatsApp" href="#" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="font-size:0.82rem;padding:0.6rem;text-decoration:none;background:rgba(37,211,102,0.12);border-color:#25d366;color:#55f08d;">Chat on WhatsApp</a>
+        </div>
+        <button type="button" id="sideResetBtn" style="background:none;border:none;color:#94a3b8;font-size:0.75rem;cursor:pointer;margin-top:1.2rem;text-decoration:underline;">← Send another request</button>
+      </div>
+
+      <!-- Protruding Tab on the Right Edge -->
+      <button type="button" id="sideDrawerToggle" class="side-drawer-tab" aria-label="Toggle Free Quote Drawer">
+        <span class="tab-text-open">FREE QUOTE ✦</span>
+        <span class="tab-text-close">CLOSE ✕</span>
+      </button>
+    </div>
   </aside>
+
+
+
+
+
+
 
   <!-- Floating Action Dock (Bottom Right - Exact elements from sample image) -->
   <aside class="floating-actions-dock" aria-label="Quick Contact Actions">
@@ -60,6 +132,8 @@
         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
       </svg>
     </a>
+
+
   </aside>
 
   <!-- Site Header & Navigation -->
@@ -85,7 +159,7 @@
       <div class="header-actions">
         
 
-        <button class="btn btn-primary btn-sm open-quote-modal">Get a Quote</button>
+        <a href="#contact" class="btn btn-primary btn-sm">Contact Us</a>
         <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -647,12 +721,13 @@
           <div class="contact-form-panel">
             <div id="contactFormContainer">
               <h3 style="font-size:1.4rem;font-weight:700;color:#ffffff;margin-bottom:1.5rem;">Send a Project Inquiry</h3>
-              <form id="mainContactForm" action="https://formsubmit.co/codenexatechnologies26@gmail.com" method="POST" target="_blank">
+              <form id="mainContactForm" action="https://formsubmit.co/nathgokul325@gmail.com" method="POST">
                 <!-- FormSubmit Configuration for Direct Inbox Delivery -->
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
                 <input type="hidden" name="_subject" id="contactHiddenSubject" value="New Project Inquiry - Codenexa Technologies">
-                <input type="hidden" name="_cc" id="contactHiddenCc" value="">
+                <input type="hidden" name="_cc" id="contactHiddenCc" value="codenexatechnologies26@gmail.com">
+                <input type="hidden" name="_replyto" id="contactHiddenReplyTo" value="">
                 <input type="hidden" name="_autoresponse" value="Thank you for contacting Codenexa Technologies! We have received your project inquiry and our technical architect will get in touch with you shortly. Direct Line: +91 75581 43975.">
                 <div class="form-row">
                   <div class="form-group">
@@ -692,7 +767,7 @@
                   Submit Inquiry →
                 </button>
                 <p style="font-size:0.75rem;color:var(--text-muted);text-align:center;margin-top:0.5rem;margin-bottom:0;">
-                  ✉ Sent directly to <strong style="color:var(--accent-cyan);">codenexatechnologies26@gmail.com</strong> with a copy to your email.
+                  ✉ Gmail Integration Active — Delivered to <strong style="color:var(--accent-cyan);">codenexatechnologies26@gmail.com</strong> with automatic copy to your email.
                 </p>
               </form>
             </div>
@@ -737,131 +812,6 @@
        INTERACTIVE MODALS
        ====================================================================== -->
 
-  <!-- 1. Free Quote & Cost Calculator Modal -->
-  <div id="quoteModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle">
-    <div class="modal-dialog">
-      <button class="modal-close-btn" aria-label="Close modal">&times;</button>
-
-      <!-- Main Form Body -->
-      <div id="quoteModalBody">
-        <div class="section-tag">Services Selection</div>
-        <h3 id="quoteModalTitle" style="font-size:1.6rem;font-weight:800;color:#ffffff;margin-bottom:0.5rem;">Select Required Services</h3>
-        <p style="color:var(--text-dim);font-size:0.9rem;margin-bottom:1.4rem;">Choose the services your project requires, and submit your request directly to our engineering team.</p>
-
-        <form id="quoteForm" action="https://formsubmit.co/codenexatechnologies26@gmail.com" method="POST" target="_blank">
-          <!-- FormSubmit Configuration for Direct Proposal Delivery -->
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_subject" id="quoteHiddenSubject" value="Official Project Proposal Request - Codenexa Technologies">
-          <input type="hidden" name="_cc" id="quoteHiddenCc" value="">
-          <input type="hidden" name="selected_services" id="quoteHiddenServices" value="">
-          <input type="hidden" name="project_scope" id="quoteHiddenScope" value="">
-          <input type="hidden" name="_autoresponse" value="Thank you for requesting an official proposal from Codenexa Technologies! We have received your specifications and our engineering team is reviewing your requirements. Direct Line / WhatsApp: +91 75581 43975.">
-          <label class="form-label">Select Services Required:</label>
-          <div class="service-selector-grid">
-            <label class="service-choice-label">
-              <input type="checkbox" class="service-choice-input" value="Modern Responsive Website" checked>
-              <span>Modern Responsive Website</span>
-            </label>
-            <label class="service-choice-label">
-              <input type="checkbox" class="service-choice-input" value="E-Commerce Store & Payments">
-              <span>E-Commerce Store & Payments</span>
-            </label>
-            <label class="service-choice-label">
-              <input type="checkbox" class="service-choice-input" value="School / College Portal ERP">
-              <span>School / College Portal ERP</span>
-            </label>
-            <label class="service-choice-label">
-              <input type="checkbox" class="service-choice-input" value="Store POS Management Software">
-              <span>Store POS Management Software</span>
-            </label>
-            <label class="service-choice-label">
-              <input type="checkbox" class="service-choice-input" value="Android Mobile Application">
-              <span>Android Mobile Application</span>
-            </label>
-            <label class="service-choice-label">
-              <input type="checkbox" class="service-choice-input" value="Business Email Setup (SPF/DKIM)">
-              <span>Business Email Setup (SPF/DKIM)</span>
-            </label>
-          </div>
-
-          <div class="form-group" style="margin-top:1.2rem;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
-              <label class="form-label" for="pagesSlider">Project Scale / Scope:</label>
-              <span id="pagesValue" style="color:var(--accent-cyan);font-weight:700;font-size:0.85rem;">Single Landing Page</span>
-            </div>
-            <input type="range" id="pagesSlider" min="1" max="15" value="1" style="width:100%;accent-color:var(--accent-cyan);cursor:pointer;">
-          </div>
-
-          <!-- Service Inclusions Highlight Banner -->
-          <div class="service-inclusions-box" style="background:rgba(255,255,255,0.03);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius-md);padding:0.9rem 1.1rem;margin:1.2rem 0;display:flex;align-items:center;gap:0.9rem;">
-            <div style="font-size:1.3rem;color:var(--accent-cyan);line-height:1;">✦</div>
-            <div style="font-size:0.82rem;color:var(--text-dim);line-height:1.45;">
-              <strong style="color:#ffffff;display:block;margin-bottom:0.15rem;">All Services Include:</strong>
-              Full source code ownership, HTTPS SSL security, cloud hosting setup & SLA support warranty.
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="quoteName">Your Name</label>
-              <input type="text" class="form-control" name="name" id="quoteName" placeholder="Your Name" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="quotePhone">Phone / WhatsApp</label>
-              <input type="tel" class="form-control" name="phone" id="quotePhone" placeholder="+91 XXXXX XXXXX" required>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-top:0.7rem;">
-            <label class="form-label" for="quoteEmail">Your Email Address</label>
-            <input type="email" class="form-control" name="email" id="quoteEmail" placeholder="name@company.com" required>
-          </div>
-
-          <button type="submit" id="quoteSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:0.8rem;">
-            Request Official Proposal →
-          </button>
-          <p style="font-size:0.75rem;color:var(--text-muted);text-align:center;margin-top:0.5rem;margin-bottom:0;">
-            ✉ Inquiries sent directly to: <span style="color:var(--accent-cyan);font-weight:600;">codenexatechnologies26@gmail.com</span>
-          </p>
-        </form>
-      </div>
-
-      <!-- Proposal Ready / Dispatched Screen -->
-      <div id="quoteModalSuccess" style="display:none;text-align:center;padding:1rem 0.2rem;">
-        <div style="width:64px;height:64px;border-radius:50%;background:rgba(16,185,129,0.15);border:2px solid #10b981;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.9rem;color:#10b981;">
-          ✓
-        </div>
-        <div class="section-tag" style="margin-bottom:0.3rem;">Proposal Drafted</div>
-        <h3 style="font-size:1.5rem;font-weight:800;color:#ffffff;margin-bottom:0.4rem;">Send Proposal to Codenexa</h3>
-        <p style="color:var(--text-dim);font-size:0.88rem;line-height:1.5;max-width:440px;margin:0 auto 1.2rem;">
-          Your request is addressed directly to <strong style="color:var(--accent-cyan);">codenexatechnologies26@gmail.com</strong>.
-          Click below to send via your email app, Gmail Web, or WhatsApp:
-        </p>
-
-        <div id="quoteSuccessSummary" style="background:rgba(6,17,33,0.85);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-md);padding:1rem;margin-bottom:1.3rem;text-align:left;font-size:0.82rem;color:var(--text-dim);line-height:1.6;">
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.75rem;max-width:420px;margin:0 auto;">
-          <a id="btnSendGmail" href="#" target="_blank" rel="noopener" class="btn btn-primary" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.85rem 1rem;font-size:0.95rem;font-weight:700;">
-            <span>🚀</span> <span>Send Proposal Request via Gmail (Instant)</span>
-          </a>
-          <a id="btnSendMailto" href="#" class="btn btn-secondary" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.75rem 1rem;font-size:0.88rem;border-color:rgba(245,158,11,0.4);">
-            <span>✉️</span> <span>Send via Default Email Client (Outlook / Mail App)</span>
-          </a>
-          <a id="btnSendWhatsApp" href="#" target="_blank" rel="noopener" class="btn btn-secondary" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.75rem 1rem;font-size:0.9rem;background:rgba(37,211,102,0.12);border-color:#25d366;color:#55f08d;">
-            <span>💬</span> <span>Also Chat on WhatsApp (+91 75581 43975)</span>
-          </a>
-        </div>
-
-        <button type="button" id="quoteResetBtn" class="btn btn-secondary" style="margin-top:1.3rem;font-size:0.8rem;padding:0.35rem 1.1rem;opacity:0.85;">
-          ← Back to Edit Details
-        </button>
-      </div>
-
-    </div>
-  </div>
-
   <!-- 2. Technical Specs Modal (Details for each service) -->
   <div id="serviceDetailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="serviceDetailTitle">
     <div class="modal-dialog">
@@ -877,7 +827,7 @@
       <div id="serviceDetailStack" class="modal-stack-tags"></div>
 
       <div style="display:flex;gap:1rem;margin-top:2rem;">
-        <button class="btn btn-primary open-quote-modal" style="flex-grow:1;">Get a Custom Quote</button>
+        <a href="#contact" class="btn btn-primary close-modal-link" style="flex-grow:1;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;">Inquire About This Service</a>
         <a href="https://wa.me/917558143975" target="_blank" rel="noopener" class="btn btn-secondary">Chat on WhatsApp</a>
       </div>
     </div>
